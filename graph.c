@@ -10,7 +10,7 @@ struct graph_t {
     int **adj;
 };
 
-int **matrix_init(size_t r, size_t c, int val) {
+static int **matrix_init(size_t r, size_t c, int val) {
     int **m = calloc(r, sizeof(int *));
     MEM_ALLOC_ERR_CHCK(m);
     for (size_t i=0; i<r; ++i) {
@@ -35,21 +35,21 @@ graph_t *graph_init(unsigned v) {
     return g;
 }
 
-void graph_insert_e(graph_t *g, edge_t e) {
+void graph_insert_edge(graph_t *restrict g, edge_t e) {
     int i = e.vi, j = e.vj;
     if (g->adj[i][j] == 0) ++g->e;
     g->adj[i][j] = 1;
     g->adj[j][i] = 1;
 }
 
-void graph_remove_e(graph_t *g, edge_t e) {
+void graph_remove_edge(graph_t *restrict g, edge_t e) {
     int i = e.vi, j = e.vj;
     if (g->adj[i][j] == 1) --g->e;
     g->adj[i][j] = 0;
     g->adj[j][i] = 0;
 }
 
-int graph_edges(edge_t * es, graph_t *g) {
+int graph_edges(edge_t *restrict es, graph_t *restrict g) {
     size_t v = g->v, e = g->e, e_cnt = 0;
     if (es == NULL) {
         es = calloc(e, sizeof(edge_t));
@@ -66,14 +66,25 @@ int graph_edges(edge_t * es, graph_t *g) {
     return e_cnt;
 }
 
-graph_t *graph_copy(graph_t *g) {
+void graph_show(graph_t *restrict g) {
+    size_t v = g->v;
+    for (size_t i=0; i<v; ++i) {
+        printf("%zu ", i);
+        for (size_t j=0; j<v; ++j)
+            if (g->adj[i][j])
+                printf("%zu ", j);
+        printf("\n");
+    }
+}
+
+graph_t *graph_copy(graph_t *restrict g) {
     graph_t *g_cp = malloc(sizeof(graph_t));
     MEM_ALLOC_ERR_CHCK(g_cp);
     *g_cp = *g;
     return g_cp;
 };
 
-void graph_destroy(graph_t *g) {
+void graph_destroy(graph_t *restrict g) {
     int v = g->v;
     for (size_t i=0; i<v; ++i)
         free(g->adj[i]);

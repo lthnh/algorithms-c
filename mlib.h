@@ -10,7 +10,7 @@
     if (ptr == NULL) {\
         char *err_msg = strerror(errno); \
         fprintf(stderr, "%s\nat %s, line %d.\n", err_msg, __FILE__, __LINE__); \
-        return EXIT_FAILURE; \
+        exit(EXIT_FAILURE); \
     }
 #endif
 
