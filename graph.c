@@ -36,7 +36,7 @@ graph_t *graph_init(unsigned v) {
     return g;
 }
 
-graph_t *graph_init_from_edges(edge_t *es, size_t e) {
+graph_t *graph_init_from_edges(edge_t *restrict es, size_t e) {
     unsigned v = (unsigned)ceil(0.5 + sqrt(1.0 - 4.0*(-2.0*e))/2.0);
     graph_t *g = graph_init(v);
     g->e = e; g->v = v;
