@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <tgmath.h>
 #include "mlib.h"
 #include "graph.h"
 
@@ -32,6 +33,15 @@ graph_t *graph_init(unsigned v) {
     MEM_ALLOC_ERR_CHCK(g);
     g->v = v; g->e = 0;
     g->adj = matrix_init(v, v, 0);
+    return g;
+}
+
+graph_t *graph_init_from_edges(edge_t *es, size_t e) {
+    unsigned v = (unsigned)ceil(0.5 + sqrt(1.0 - 4.0*(-2.0*e))/2.0);
+    graph_t *g = graph_init(v);
+    g->e = e; g->v = v;
+    for (size_t i=0; i<e; ++i)
+        graph_insert_edge(g, es[i]);
     return g;
 }
 
