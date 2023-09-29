@@ -59,15 +59,16 @@ void graph_remove_edge(graph_t *restrict g, edge_t e) {
     g->adj[j][i] = 0;
 }
 
-int graph_edges(edge_t *restrict es, graph_t *restrict g) {
+unsigned graph_edges(edge_t *restrict es, graph_t *restrict g) {
     size_t v = g->v, e = g->e, e_cnt = 0;
     if (es == NULL) {
         es = calloc(e, sizeof(edge_t));
         MEM_ALLOC_ERR_CHCK(es);
     }
     else {
-        fprintf(stderr, "Pointer to edges array has not been initalized to NULL.");
-        return EXIT_FAILURE;
+        fprintf(stderr, "Pointer to edges array has not been initalized to NULL.\n");
+        fprintf(stderr, "at %s, %d.", __FILE__, __LINE__);
+        exit(EXIT_FAILURE);
     }
     for (size_t i=0; i<v; ++i)
         for (size_t j=0; j<v; ++j)
