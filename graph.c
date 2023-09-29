@@ -78,13 +78,11 @@ unsigned graph_edges(edge_t *restrict es, graph_t *restrict g) {
 }
 
 void graph_show(graph_t *restrict g) {
-    size_t v = g->v;
-    for (size_t i=0; i<v; ++i) {
-        printf("%zu ", i);
-        for (size_t j=0; j<v; ++j)
-            if (g->adj[i][j])
-                printf("%zu ", j);
-        printf("\n");
+    edge_t *es = NULL;
+    unsigned e = graph_edges(es, g);
+    if (e > 0) {
+        for (size_t i=0; i<e; ++i)
+            printf("%u - %u\n", es[i].vi, es[i].vj);
     }
 }
 
