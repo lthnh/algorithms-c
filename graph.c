@@ -60,14 +60,14 @@ graph_t *graph_init_from_edges(edge_t *restrict es, size_t e) {
 }
 
 void graph_insert_edge(graph_t *restrict g, edge_t e) {
-    int i = e.vi, j = e.vj;
+    unsigned i = e.vi, j = e.vj;
     if (g->adj[i][j] == 0) ++g->e;
     g->adj[i][j] = 1;
     g->adj[j][i] = 1;
 }
 
 void graph_remove_edge(graph_t *restrict g, edge_t e) {
-    int i = e.vi, j = e.vj;
+    unsigned i = e.vi, j = e.vj;
     if (g->adj[i][j] == 1) --g->e;
     g->adj[i][j] = 0;
     g->adj[j][i] = 0;
@@ -102,7 +102,7 @@ graph_t *graph_copy(graph_t *restrict g) {
 };
 
 void graph_destroy(graph_t *restrict g) {
-    int v = g->v;
+    unsigned v = g->v;
     for (size_t i=0; i<v; ++i)
         free(g->adj[i]);
     free(g);
