@@ -3,17 +3,18 @@
 #include "graph.h"
 
 int main(void) {
-    unsigned v, e;
-    printf("Number of vertices: ");
-    scanf("%u", &v);
+    unsigned e;
+    // printf("Number of vertices: ");
+    // scanf("%u", &v);
     printf("Number of edges: ");
     scanf("%u", &e);
-    graph_t *g = graph_init(v);
-    for (size_t i=0; i<(size_t)e; ++i) {
+    edge_t *es = calloc(e, sizeof(edge_t));
+    for (size_t i=0; i<e; ++i) {
         unsigned u, w;
         scanf("%u %u", &u, &w);
-        graph_insert_edge(g, edge(u, w));
+        es[i] = edge(u, w);
     }
+    graph_t *g = graph_init_from_edges(es, e);
     graph_show(g);
     graph_destroy(g);
     return EXIT_SUCCESS;
