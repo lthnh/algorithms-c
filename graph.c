@@ -59,31 +59,25 @@ void graph_remove_edge(graph_t *restrict g, edge_t e) {
     g->adj[j][i] = 0;
 }
 
-unsigned graph_edges(edge_t *restrict es, graph_t *restrict g) {
-    size_t v = g->v, e = g->e, e_cnt = 0;
-    if (es == NULL) {
-        es = calloc(e, sizeof(edge_t));
-        MEM_ALLOC_ERR_CHCK(es);
-    }
-    else {
-        fprintf(stderr, "Pointer to edges array has not been initalized to NULL.\n");
-        fprintf(stderr, "at %s, %d.", __FILE__, __LINE__);
-        exit(EXIT_FAILURE);
-    }
+unsigned graph_edges(edge_t **restrict es, graph_t *restrict g) {
+    unsigned v = g->v, e = g->e, e_cnt = 0;
+    *es = calloc(e, sizeof(edge_t));
+    MEM_ALLOC_ERR_CHCK(es);
     for (size_t i=0; i<v; ++i)
         for (size_t j=0; j<v; ++j)
             if (g->adj[i][j] == 1)
-                es[e_cnt++] = edge(i, j);
+                (*es)[e_cnt++] = edge(i, j);
     return e_cnt;
 }
 
 void graph_show(graph_t *restrict g) {
     edge_t *es = NULL;
-    unsigned e = graph_edges(es, g);
+    unsigned e = graph_edges(&es, g);
     if (e > 0) {
         for (size_t i=0; i<e; ++i)
             printf("%u - %u\n", es[i].vi, es[i].vj);
     }
+    free(es);
 }
 
 graph_t *graph_copy(graph_t *restrict g) {
