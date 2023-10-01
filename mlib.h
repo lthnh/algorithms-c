@@ -14,4 +14,9 @@
     }
 #endif
 
+#define CUSTM_ERR_MSG(msg) \
+    fprintf(stderr, msg); \
+    fprintf(stderr, "at %s, line %d.", __FILE__, __LINE__); \
+    exit(EXIT_FAILURE);
+
 #endif

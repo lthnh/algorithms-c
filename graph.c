@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
+#include <sys/param.h>
 #include <tgmath.h>
 #include "mlib.h"
 #include "graph.h"
@@ -37,7 +39,19 @@ graph_t *graph_init(unsigned v) {
 }
 
 graph_t *graph_init_from_edges(edge_t *restrict es, size_t e) {
-    unsigned v = (unsigned)ceil(0.5 + sqrt(1.0 - 4.0*(-2.0*e))/2.0);
+    unsigned v = 0;
+    for (size_t i=0; i<e; ++i) {
+        unsigned u = es[i].vi, w = es[i].vj;
+        if (v<UINT_MAX)
+            v = MAX(v, MAX(u, w));
+        else {
+            // fprintf(stderr, "Value for variable e is too large to be casted from size_t to unsigned.");
+            // fprintf(stderr, "at %s, line %d.", __FILE__, __LINE__);
+            // exit(EXIT_FAILURE);
+            CUSTM_ERR_MSG("Value for variable e is too large to be casted from size_t to unsigned.");
+        }
+    }
+    ++v;
     graph_t *g = graph_init(v);
     g->e = e; g->v = v;
     for (size_t i=0; i<e; ++i)
